@@ -32,12 +32,14 @@ def display_mode_toggle():
             st.session_state['mode_toggle'] = st.session_state['mode'] == "Just Chat"
         
         # Toggle between modes and update the session state correctly
-        toggle = st.toggle("Just Chat Mode", key="mode_toggle", value=st.session_state['mode_toggle'])
+        toggle = st.toggle("Just Chat", key="mode_toggle", value=st.session_state['mode_toggle'])
         
         if toggle:
             st.session_state['mode'] = "Just Chat"
+            st.session_state.messages = [{"role": "assistant", "content": "Chat cleared. How can I assist you?"}]
         else:
             st.session_state['mode'] = "Search and Chat"
+            st.session_state.messages = [{"role": "assistant", "content": "Chat cleared. How can I assist you?"}]
 
 
 def display_sidebar():

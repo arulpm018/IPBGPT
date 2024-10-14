@@ -1,11 +1,12 @@
 import streamlit as st
 from ui_components import initialize_session_state, display_sidebar, display_chat_interface, display_mode_toggle
+from app_modes import display_just_chat_interface
 
 def main():
 
     st.set_page_config(
         page_title="IPB-GPT",
-        page_icon="🚀",
+        page_icon="frontend/img/logo.png",
         layout="wide"
     )
 
@@ -27,7 +28,7 @@ def main():
     display_mode_toggle()
 
     if st.session_state['mode'] == "Just Chat":
-        from app_modes import display_just_chat_interface
+
         display_just_chat_interface()
     else:
         display_sidebar()
