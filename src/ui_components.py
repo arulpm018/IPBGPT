@@ -69,7 +69,7 @@ def display_sidebar():
                 else:
                     st.session_state['related_document'] = related_docs
                     st.session_state['selected_document'] = []  # Reset selected documents
-                    st.success(f"Found {len(related_docs.get('related_documents', []))} related documents!")
+                    st.success(f"Found {len(related_docs)} related documents!")
             else:
                 st.warning("Please enter a thesis title before searching.")
 
