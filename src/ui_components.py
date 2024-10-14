@@ -29,17 +29,17 @@ def display_mode_toggle():
     with col2:
         # Add a session state variable to track the checkbox status
         if 'mode_toggle' not in st.session_state:
-            st.session_state['mode_toggle'] = st.session_state['mode'] == "Just Chat"
+            st.session_state['mode_toggle'] = st.session_state['mode'] == "Chat Mode"
         
         # Toggle between modes and update the session state correctly
         toggle = st.toggle("Just Chat", key="mode_toggle", value=st.session_state['mode_toggle'])
         
         if toggle:
             st.session_state['mode'] = "Just Chat"
-            st.session_state.messages = [{"role": "assistant", "content": "Chat cleared. How can I assist you?"}]
+            st.session_state.messages = [{"role": "assistant", "content": "How can I assist you?"}]
         else:
             st.session_state['mode'] = "Search and Chat"
-            st.session_state.messages = [{"role": "assistant", "content": "Chat cleared. How can I assist you?"}]
+            st.session_state.messages = [{"role": "assistant", "content": "How can I assist you?"}]
 
 
 def display_sidebar():
