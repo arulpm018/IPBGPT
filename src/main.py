@@ -20,7 +20,7 @@ def main():
     st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
     st.title("💬 IPB-GPT")
-    st.caption("🚀 A Repository Chatbot that helps you find related research about your undergraduate thesis")
+    st.caption("🚀 IPB Research Assistant: A Smart Chatbot to Help You Find Relevant Research for Your Undergraduate Thesis. Chat About Research at IPB Anytime!")
 
     initialize_session_state()
 
