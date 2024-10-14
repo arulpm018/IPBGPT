@@ -27,8 +27,7 @@ def main():
     # Add mode toggle and Clear Chat button
     display_mode_toggle()
 
-    if st.session_state['mode'] == "Just Chat":
-
+    if st.session_state['mode'] == "Chat Mode":
         display_just_chat_interface()
     else:
         display_sidebar()

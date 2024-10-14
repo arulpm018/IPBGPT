@@ -1,5 +1,4 @@
 import streamlit as st
-from ui_components import display_sidebar, display_chat_interface
 import requests
 import os
 from dotenv import load_dotenv
@@ -11,9 +10,6 @@ load_dotenv()
 API_URL = os.getenv("URL_BASE")
 QUERY_ENDPOINT = f"{API_URL}/combined-query-chat/"
 
-def display_search_and_chat_mode():
-    display_sidebar()
-    display_chat_interface()
 
 def display_just_chat_interface():
     # Display chat messages from history on app rerun

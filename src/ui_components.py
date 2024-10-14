@@ -13,7 +13,8 @@ def initialize_session_state():
         'prompt': None,
         'uploaded_file': None,
         'current_file': None,
-        'mode': 'Search and Chat'
+        'mode': 'Search and Chat',
+        'previous_mode': 'Search and Chat'
     }
     for key, value in defaults.items():
         if key not in st.session_state:
@@ -32,14 +33,16 @@ def display_mode_toggle():
             st.session_state['mode_toggle'] = st.session_state['mode'] == "Chat Mode"
         
         # Toggle between modes and update the session state correctly
-        toggle = st.toggle("Just Chat", key="mode_toggle", value=st.session_state['mode_toggle'])
+        toggle = st.toggle("chat mode", key="mode_toggle", value=st.session_state['mode_toggle'])
         
-        if toggle:
-            st.session_state['mode'] = "Just Chat"
-            st.session_state.messages = [{"role": "assistant", "content": "How can I assist you?"}]
-        else:
-            st.session_state['mode'] = "Search and Chat"
-            st.session_state.messages = [{"role": "assistant", "content": "How can I assist you?"}]
+        new_mode = "Chat Mode" if toggle else "Search and Chat"
+        
+        # Check if the mode has changed
+        if new_mode != st.session_state['previous_mode']:
+            st.session_state['mode'] = new_mode
+            st.session_state['previous_mode'] = new_mode
+            # Clear chat history when mode changes
+            st.session_state.messages = [{"role": "assistant", "content": f"Mode changed to {new_mode}. How can I assist you?"}]
 
 
 def display_sidebar():
@@ -152,4 +155,6 @@ def display_chat_interface():
         st.info("You are currently chatting with the uploaded PDF.")
     elif st.session_state['selected_document']:
         st.info("You are currently chatting with the selected documents from the search results.")
+    elif st.session_state['mode'] == "Chat Mode":
+        st.info("You are in Chat Mode mode.")
 
