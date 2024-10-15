@@ -2,7 +2,14 @@ import streamlit as st
 from document_processing import upload_pdf, get_related_documents
 from chat_logic import process_pdf_chat, process_selected_documents_chat
 import re
+import requests
+import requests
+import streamlit as st
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+API_URL = os.getenv("URL_BASE")
 def initialize_session_state():
     defaults = {
         'messages': [{"role": "assistant", "content": "Can I assist you today?"}],
@@ -14,11 +21,22 @@ def initialize_session_state():
         'uploaded_file': None,
         'current_file': None,
         'mode': 'Search and Chat',
-        'previous_mode': 'Search and Chat'
+        'previous_mode': 'Search and Chat',
+        'session_id': None
     }
     for key, value in defaults.items():
         if key not in st.session_state:
             st.session_state[key] = value
+    
+    if st.session_state['session_id'] is None:
+        try:
+            response = requests.post(f"{API_URL}/create-session")
+            if response.status_code == 200:
+                st.session_state['session_id'] = response.json()['session_id']
+            else:
+                st.error("Failed to create session. Please try refreshing the page.")
+        except requests.RequestException:
+            st.error("Failed to connect to the server. Please check your internet connection and try again.")
 
 def display_mode_toggle():
     col1, col2 = st.columns([9, 1])
@@ -28,20 +46,15 @@ def display_mode_toggle():
             st.session_state.messages = [{"role": "assistant", "content": "Chat cleared. How can I assist you?"}]
     
     with col2:
-        # Add a session state variable to track the checkbox status
         if 'mode_toggle' not in st.session_state:
             st.session_state['mode_toggle'] = st.session_state['mode'] == "Chat Mode"
         
-        # Toggle between modes and update the session state correctly
         toggle = st.toggle("chat mode", key="mode_toggle", value=st.session_state['mode_toggle'])
-        
         new_mode = "Chat Mode" if toggle else "Search and Chat"
         
-        # Check if the mode has changed
         if new_mode != st.session_state['previous_mode']:
             st.session_state['mode'] = new_mode
             st.session_state['previous_mode'] = new_mode
-            # Clear chat history when mode changes
             st.session_state.messages = [{"role": "assistant", "content": f"Mode changed to {new_mode}. How can I assist you?"}]
 
 
@@ -52,10 +65,8 @@ def display_sidebar():
         text_input = st.text_input("Enter your undergraduate thesis Title 👇")
         new_number = st.number_input('Insert a min number of the research', min_value=1, format='%i', value=st.session_state['number'])
         
-        # Create a button to trigger the search
         search_button = st.button("Search for Related Documents")
 
-        # Check if any input has changed or if the search button is pressed
         if search_button or new_number != st.session_state['number'] or text_input != st.session_state.get('prompt', ''):
             if text_input:
                 st.session_state['number'] = new_number
@@ -98,18 +109,16 @@ def display_retrieved_documents():
             st.markdown("---")
 
 def render_llm_response(response):
-    # Split the response into segments based on code blocks
+
     segments = re.split(r'(```[\s\S]*?```)', response)
     
     for segment in segments:
         if segment.startswith('```') and segment.endswith('```'):
-            # This is a code block
             code = segment.strip('`').split('\n')
-            language = code[0] if code[0] else 'python'  # Default to python if no language specified
+            language = code[0] if code[0] else 'python'  
             code_content = '\n'.join(code[1:])
             st.code(code_content, language=language)
         else:
-            # This is regular text
             st.markdown(segment)
 
 def display_chat_interface():

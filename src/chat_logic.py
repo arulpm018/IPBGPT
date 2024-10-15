@@ -11,7 +11,8 @@ def process_pdf_chat(prompt, chat_history):
     url = f"{URL_BASE}/chat-with-pdf/"
     data = {
         "query": prompt,
-        "chat_history": chat_history
+        "chat_history": chat_history,
+        "session_id": st.session_state['session_id']
     }
     try:
         response = requests.post(url, json=data)
@@ -30,7 +31,8 @@ def process_selected_documents_chat(prompt, chat_history):
     data = {
         "query": prompt,
         "context": context,
-        "chat_history": chat_history
+        "chat_history": chat_history,
+        "session_id": st.session_state['session_id']
     }
     try:
         response = requests.post(url, json=data)

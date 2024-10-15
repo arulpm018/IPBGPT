@@ -10,7 +10,6 @@ def main():
         layout="wide"
     )
 
-    # Custom CSS to hide Streamlit's default menu and footer
     hide_streamlit_style = """
         <style>
         #MainMenu {visibility: hidden;}
@@ -23,8 +22,6 @@ def main():
     st.caption("🚀 IPB Research Assistant: A Smart Chatbot to Help You Find Relevant Research for Your Undergraduate Thesis. Chat About Research at IPB Anytime!")
 
     initialize_session_state()
-
-    # Add mode toggle and Clear Chat button
     display_mode_toggle()
 
     if st.session_state['mode'] == "Chat Mode":
