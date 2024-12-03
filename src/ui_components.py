@@ -27,16 +27,7 @@ def initialize_session_state():
     for key, value in defaults.items():
         if key not in st.session_state:
             st.session_state[key] = value
-    
-    if st.session_state['session_id'] is None:
-        try:
-            response = requests.post(f"{API_URL}/create-session")
-            if response.status_code == 200:
-                st.session_state['session_id'] = response.json()['session_id']
-            else:
-                st.error("Failed to create session. Please try refreshing the page.")
-        except requests.RequestException:
-            st.error("Failed to connect to the server. Please check your internet connection and try again.")
+
 
 def display_mode_toggle():
     col1, col2 = st.columns([9, 1])
